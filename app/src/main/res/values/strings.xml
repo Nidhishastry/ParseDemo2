@@ -8,4 +8,10 @@
     <string name="sign_in_button">Login</string>
     <string name="sign_up">Sign Up</string>
     <string name="title_activity_signup">Signup</string>
+    <string name="title_activity_main">MainActivity</string>
+
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
 </resources>

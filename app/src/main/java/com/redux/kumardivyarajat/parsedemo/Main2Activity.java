@@ -6,16 +6,33 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Main2Activity extends ActionBarActivity {
-   public static final String TAG = Main2Activity.class.getSimpleName();
+
+    public Students s;
+    private List<Students> studentsList= new ArrayList<Students>();
+    private CustomAdapter adapter;
+     private  ListView lv;
+
+
+    public static final String TAG = Main2Activity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        adapter = new CustomAdapter(this, studentsList);
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
             // do stuff with the user
@@ -24,7 +41,31 @@ public class Main2Activity extends ActionBarActivity {
             // show the signup or login screen
             navigateToLogin();
         }
+         lv = (ListView)findViewById(R.id.listView);
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Students");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if(e==null) {
 
+                    for(ParseObject ob: parseObjects) {
+
+                       s.setName(ob.getString("Name"));
+                        s.setUSN(ob.getString("USN"));
+                       // s.setPic(ob.getBytes());
+                        s.setSemester(ob.getString("Semester"));
+                        studentsList.add(s);
+
+
+                        lv.setAdapter(adapter);
+
+                       
+                    }
+                } else {
+                    Toast.makeText(Main2Activity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
